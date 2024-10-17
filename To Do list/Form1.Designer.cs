@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             label1 = new Label();
             titletb = new TextBox();
             descriptiontb = new TextBox();
@@ -38,7 +39,9 @@
             deletebtn = new Button();
             savebtn = new Button();
             dataGridView1 = new DataGridView();
+            bindingSource1 = new BindingSource(components);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -157,6 +160,7 @@
             Text = "To-Do list";
             Load += toDoList_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -173,5 +177,6 @@
         private Button deletebtn;
         private Button savebtn;
         private DataGridView dataGridView1;
+        private BindingSource bindingSource1;
     }
 }

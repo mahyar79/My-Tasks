@@ -5,6 +5,12 @@ using System.Linq;
 
 namespace To_Do_list
 {
+
+    public class Task
+    {
+        public string title { get; set; }
+        public string description { get; set; }
+    }
     public partial class toDoList : Form
     {
         public toDoList()
@@ -12,37 +18,54 @@ namespace To_Do_list
             InitializeComponent();
         }
 
-        DataTable todoList = new DataTable();
+        List<Task> t = new List<Task>();
+        BindingSource bindingSource = new BindingSource();
         bool isEditing = false;
         private void toDoList_Load(object sender, EventArgs e)
         {
-            // columns 
-            todoList.Columns.Add("Title");
-            todoList.Columns.Add("Description");
-
-            dataGridView1.DataSource = todoList;
+           
+            bindingSource.DataSource = t;
+            dataGridView1.DataSource = bindingSource;
         }
 
         private void newbtn_Click(object sender, EventArgs e)
         {
             titletb.Text = "";
             descriptiontb.Text = "";
+            
         }
 
         private void editbttn_Click(object sender, EventArgs e)
         {
-            isEditing = true;
+           if(dataGridView1.CurrentCell != null)
+            {
 
-            titletb.Text = todoList.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[0].ToString();
-            descriptiontb.Text = todoList.Rows[dataGridView1.CurrentCell.RowIndex].ItemArray[1].ToString();
+                isEditing = true;
 
+                titletb.Text = t[dataGridView1.CurrentCell.RowIndex].title;
+                descriptiontb.Text = t[dataGridView1.CurrentCell.RowIndex].description;
+            }
+            else
+            {
+                MessageBox.Show("please select a row to edit");
+            }
+            
+  
         }
 
         private void deletebtn_Click(object sender, EventArgs e)
         {
             try
             {
-                todoList.Rows[dataGridView1.CurrentCell.RowIndex].Delete();
+                if( dataGridView1.CurrentCell != null)
+                {
+                    t.RemoveAt(dataGridView1.CurrentCell.RowIndex);
+                    bindingSource.ResetBindings(false);
+                }
+                else
+                {
+                    MessageBox.Show("please select a row to delete");
+                }
             }
             catch (Exception ex)
             {
@@ -53,19 +76,37 @@ namespace To_Do_list
 
         private void savebtn_Click(object sender, EventArgs e)
         {
+            if(string.IsNullOrEmpty(titletb.Text) || (string.IsNullOrEmpty(descriptiontb.Text))) {  
+                MessageBox.Show("Please fill in both blanks");
+
+            }
+
+            
+
             if (isEditing)
             {
-                todoList.Rows[dataGridView1.CurrentCell.RowIndex]["Title"] = titletb.Text;
-                todoList.Rows[dataGridView1.CurrentCell.RowIndex]["Description"] = descriptiontb.Text;
+                
+                t[dataGridView1.CurrentCell.RowIndex].title = titletb.Text;
+                t[dataGridView1.CurrentCell.RowIndex].description = descriptiontb.Text;
+
             }
             else
             {
-                todoList.Rows.Add(titletb.Text, descriptiontb.Text);
-               
+                Task newTask = new Task
+                {
+                    title = titletb.Text,
+                    description = descriptiontb.Text
+                };
+                t.Add(newTask);
+
             }
+
+
             titletb.Text = "";
             descriptiontb.Text = "";
             isEditing = false;
+
+            bindingSource.ResetBindings(false);
         }
     }
 }

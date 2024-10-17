@@ -108,5 +108,6 @@ namespace To_Do_list
 
             bindingSource.ResetBindings(false);
         }
+        // that's all
     }
 }
